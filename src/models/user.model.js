@@ -25,19 +25,18 @@ const userSchema = new mongoose.Schema({
     timestamps: true // Automatically add createdAt and updatedAt fields of users
 })
 
-userSchema.pre("save", async function(next){
-    // Hash the password before saving the user document
-    if(this.isModified("password")){
-        return next();
-    }
+userSchema.pre("save", async function(next) {
+    if (!this.isModified("password")) return;
 
-    const hash = await bcrypt.hash(this.password,10);
-    this.password = hash;
-    return next();
-})
+    this.password = await bcrypt.hash(this.password, 10);
+    return;
+});
 
 userSchema.methods.comparePassword = async function(password){
-    return await bcrypt.compare(password, this.password);
+    console.log(password,this.password);
+    const result = await bcrypt.compare(password, this.password);
+    console.log("Compare result:", result);
+    return result;
 }
 
 const userModel = mongoose.model("user", userSchema);
