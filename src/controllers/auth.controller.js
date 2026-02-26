@@ -1,5 +1,6 @@
 const userModel = require("../models/user.model");
 const jwt = require("jsonwebtoken");
+const emailService = require("../services/email.service");
 /** 
 * -user register controller
 * - POST /api/auth/register 
@@ -33,6 +34,8 @@ async function userRegisterController(req,res){
         },
         token
     })
+    //so now we have to send registration email to user using nodemailer and google oauth2.0
+    await emailService.sendRegistrationEmail(user.email,user.name);
 }
 
 /** 
