@@ -25,4 +25,7 @@ const accountSchema = new mongoose.Schema({
     timestamps: true
 })
 
-accountSchema.index({user:1,status:1})
+accountSchema.index({user:1,status:1}); // create a compound index on user and status fields for faster queries
+const accountModel = mongoose.model("account", accountSchema);
+
+module.exports = accountModel;
